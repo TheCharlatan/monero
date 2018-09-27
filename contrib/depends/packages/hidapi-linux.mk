@@ -7,6 +7,7 @@ $(package)_dependencies=libusb eudev
 
 define $(package)_set_vars
 $(package)_config_opts=--enable-static
+$(package)_config_opts=--disable-shared
 $(package)_config_opts+=--prefix=$(host_prefix)
 $(package)_config_opts+=libudev_LIBS="-L$(host_prefix)/lib -ludev"
 $(package)_config_opts+=libudev_CFLAGS=-I$(host_prefix)/include
@@ -24,5 +25,6 @@ define $(package)_build_cmds
 endef
 
 define $(package)_stage_cmds
-  $(MAKE) DESTDIR=$($(package)_staging_dir) install
+  $(MAKE) DESTDIR=$($(package)_staging_dir) install &&\
+  cp libusb/* $($(package)_staging_dir)/$(host_prefix)/lib/
 endef

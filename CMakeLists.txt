@@ -436,6 +436,24 @@ if(STATIC AND NOT IOS)
 endif()
 
 find_package(HIDAPI)
+if(HIDAPI_FOUND AND STATIC AND NOT MINGW)
+  find_library(LIBUSB_LIBRARY usb-1.0)
+  find_file(HIDAPI_OBJECT NAMES hid.o hid-libusb.o
+		PATHS ${Readline_ROOT_DIR}/lib
+		PATH_SUFFIXES linux/.libs libusb/.libs linux libusb mac
+		DOC "The location of the HIDAPI static object file"
+  )
+  message(STATUS "found ${HIDAPI_OBJECT}")
+  set(HIDAPI_STATIC_OBJECT ${HIDAPI_OBJECT})
+  find_package(PkgConfig REQUIRED)
+  #if (HIDAPI_OBJECT MATCHES \(-libusb|/libusb/(.libs/)?hid\)\\.o\$)
+  #  pkg_check_modules(LIBUSB REQUIRED libusb-1.0)
+#	set(HIDAPI_LINK_LIBS ${LIBUSB_LIBRARIES} rt pthread)
+#  else()
+    pkg_check_modules(LIBUDEV REQUIRED libudev)
+    set(HIDAPI_LINK_LIBS ${LIBUDEV_LIBRARIES})
+  endif()
+endif()
 
 add_definition_if_library_exists(c memset_s "string.h" HAVE_MEMSET_S)
 add_definition_if_library_exists(c explicit_bzero "strings.h" HAVE_EXPLICIT_BZERO)
@@ -478,10 +496,17 @@ link_directories(${LIBUNWIND_LIBRARY_DIRS})
 
 # Final setup for hid
 if (HIDAPI_FOUND) 
+  find_library(LIBUSB_LIBRARY usb-1.0)
   message(STATUS "Using HIDAPI include dir at ${HIDAPI_INCLUDE_DIR}")
   add_definitions(-DHAVE_HIDAPI)
   include_directories(${HIDAPI_INCLUDE_DIR})
   link_directories(${LIBHIDAPI_LIBRARY_DIRS})
+  find_file(HIDAPI_OBJECT NAMES hid.o hid-libusb.o
+    PATHS ${Readline_ROOT_DIR}/lib
+    PATH_SUFFIXES linux/.libs libusb/.libs linux libusb mac
+    DOC "The location of the HIDAPI static object file"
+  )
+  set(HIDAPI_LIBRARIES "${HIDAPI_LIBRARIES};${LIBUSB_LIBRARY}")
 else (HIDAPI_FOUND)
   message(STATUS "Could not find HIDAPI")
 endif()
