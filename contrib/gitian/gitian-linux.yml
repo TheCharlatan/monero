@@ -22,6 +22,8 @@ packages:
 - "binutils-riscv64-linux-gnu"
 - "g++-8-multilib"
 - "gcc-8-multilib"
+- "gcc-multilib"
+- "g++-multilib"
 - "binutils-gold"
 - "git"
 - "pkg-config"
