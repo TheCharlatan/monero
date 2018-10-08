@@ -153,7 +153,8 @@ script: |
     cmake .. -DCMAKE_TOOLCHAIN_FILE=${BASEPREFIX}/${i}/share/toolchain.cmake
     make
     DISTNAME=monero-${i}.tar.gz
-    tar -cvzf DISTNAME bin/*
+    tar -cvzf $DISTNAME bin/*
     cp DISTNAME ~/
-    rm -rf *
+    cd ..
+    rm -rf build
   done
