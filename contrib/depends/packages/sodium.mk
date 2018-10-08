@@ -11,6 +11,7 @@ endef
 
 define $(package)_config_cmds
   ./autogen.sh &&\
+  patch -p1 < $($(package)_patch_dir)/fix-whitespace.patch &&\
   $($(package)_autoconf) $($(package)_config_opts)
 endef
 
