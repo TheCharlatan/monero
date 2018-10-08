@@ -1,4 +1,4 @@
-packages:=boost openssl libevent zeromq cppzmq zlib expat ldns cppzmq readline libiconv qt
+packages:=libiconv boost openssl libevent zeromq cppzmq zlib expat ldns cppzmq readline qt
 native_packages := native_ccache
 
 wallet_packages=bdb
