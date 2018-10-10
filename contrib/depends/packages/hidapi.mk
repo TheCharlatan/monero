@@ -10,16 +10,12 @@ $(package)_config_opts=--enable-static --disable-shared
 $(package)_config_opts+=--prefix=$(host_prefix)
 $(package)_config_opts_darwin+=RANLIB="$(host_prefix)/native/bin/x86_64-apple-darwin11-ranlib" 
 $(package)_config_opts_darwin+=AR="$(host_prefix)/native/bin/x86_64-apple-darwin11-ar" 
-#$(package)_config_opts_darwin+=AR="$($(package)_libtool)"
-$(package)_config_opts_darwin+=ARFLAGS="-o"
 $(pacakge)_config_opts_darwin+=CC="$(host_prefix)/native/bin/$($(package)_cc)"
 $(package)_config_opts_darwin+=--disable-libtool-lock
 $(package)_config_opts_linux+=libudev_LIBS="-L$(host_prefix)/lib -ludev"
 $(package)_config_opts_linux+=libudev_CFLAGS=-I$(host_prefix)/include
 $(package)_config_opts_linux+=libusb_LIBS="-L$(host_prefix)/lib -lusb-1.0"
 $(package)_config_opts_linux+=libusb_CFLAGS=-I$(host_prefix)/include/libusb-1.0
-$(package)_build_opts_darwin=AR="$($(package)_libtool)"
-$(package)_build_opts_darwin+=ARFLAGS="-o"
 endef
 
 define $(package)_config_cmds
