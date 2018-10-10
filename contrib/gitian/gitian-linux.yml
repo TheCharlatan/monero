@@ -43,13 +43,13 @@ packages:
 - "libprotobuf-dev"
 - "python3-zmq"
 remotes:
-- "url": "https://github.com/monero-project/monero.git"
+- "url": "https://github.com/TheCharlatan/monero.git"
   "dir": "monero"
 files: []
 script: |
 
   WRAP_DIR=$HOME/wrapped
-  HOSTS="x86_64-linux-gnu arm-linux-gnueabihf aarch64-linux-gnu i686-linux-gnu"
+  HOSTS="x86_64-linux-gnu"
   FAKETIME_HOST_PROGS="gcc g++"
   FAKETIME_PROGS="date ar ranlib nm"
   HOST_CFLAGS="-O2 -g"

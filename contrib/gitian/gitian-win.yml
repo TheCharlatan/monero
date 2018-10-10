@@ -23,12 +23,12 @@ packages:
 - "rename"
 - "cmake"
 remotes:
-- "url": "https://github.com/monero-project/monero.git"
+- "url": "https://github.com/TheCharlatan/monero.git"
   "dir": "monero"
 files: []
 script: |
   WRAP_DIR=$HOME/wrapped
-  HOSTS="i686-w64-mingw32 x86_64-w64-mingw32"
+  HOSTS="x86_64-w64-mingw32"
   FAKETIME_HOST_PROGS="ar ranlib nm windres strip objcopy"
   FAKETIME_PROGS="date zip"
   HOST_CFLAGS="-O2 -g"
