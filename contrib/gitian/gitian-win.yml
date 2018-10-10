@@ -1,5 +1,5 @@
 ---
-name: "bitcoin-win-0.18"
+name: "monero-win-0.13"
 enable_cache: true
 suites:
 - "bionic"
@@ -125,7 +125,7 @@ script: |
     export PATH=${BASEPREFIX}/${i}/native/bin:${ORIGPATH}
     mkdir build && cd build
     cmake .. -DCMAKE_TOOLCHAIN_FILE=${BASEPREFIX}/${i}/share/toolchain.cmake
-    make
+    make -j 4
     DISTNAME=monero-${i}
     mv bin ${DISTNAME}
     find ${DISTNAME}/ | sort | zip -X@ ${OUTDIR}/${DISTNAME}.zip

@@ -1,5 +1,5 @@
 ---
-name: "bitcoin-osx-0.18"
+name: "monero-osx-0.13"
 enable_cache: true
 suites:
 - "bionic"
@@ -89,7 +89,7 @@ script: |
 
   # Build dependencies for each host
   for i in $HOSTS; do
-    make ${MAKEOPTS} -C ${BASEPREFIX} HOST="${i}"
+    make ${MAKEOPTS} -C ${BASEPREFIX} HOST="${i}" -j 4
   done
 
   # Faketime for binaries

@@ -70,7 +70,7 @@ def build():
 
     if args.macos:
         print('\nCompiling ' + args.version + ' MacOS')
-        subprocess.check_call(['bin/gbuild', '-j', args.jobs, '-m', args.memory, '--commit', 'monero'+args.commit, '--url', 'monero'+args.url, '../monero/contrib/gitian/gitian-osx.yml'])
+        subprocess.check_call(['bin/gbuild', '-j', args.jobs, '-m', args.memory, '--commit', 'monero='+args.commit, '--url', 'monero'+args.url, '../monero/contrib/gitian/gitian-osx.yml'])
         subprocess.check_call(['bin/gsign', '-p', args.sign_prog, '--signer', args.signer, '--release', args.version+'-osx-unsigned', '--destination', '../gitian.sigs/', '../monero/contrib/gitian/gitian-osx.yml'])
         subprocess.check_call('mv build/out/monero*.tar.gz ../monero-binaries/'+args.version, shell=True)
 
