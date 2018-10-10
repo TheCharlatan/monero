@@ -31,6 +31,7 @@ remotes:
 - "url": "https://github.com/TheCharlatan/monero.git"
   "dir": "monero"
 files:
+
 - "MacOSX10.11.sdk.tar.gz"
 script: |
   WRAP_DIR=$HOME/wrapped
@@ -101,7 +102,7 @@ script: |
   ORIGPATH="$PATH"
   # Build in a new dir for each host
   for i in ${HOSTS}; do
-    export PATH=${BASEPREFIX}/${i}/native/bin:${ORIGPATH}
+  #export PATH=${BASEPREFIX}/${i}/native/bin:${ORIGPATH}
     mkdir build && cd build
     cmake .. -DCMAKE_TOOLCHAIN_FILE=${BASEPREFIX}/${i}/share/toolchain.cmake
     make
