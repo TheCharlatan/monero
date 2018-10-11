@@ -3,8 +3,8 @@ Gitian building
 
 *Setup instructions for a Gitian build of Monero using a VM or physical system.*
 
-Gitian is the deterministic build process that is used to build the Bitcoin
-Core executables. It provides a way to be reasonably sure that the
+Gitian is the deterministic build process that is used to build the Monero CLI
+executables. It provides a way to be reasonably sure that the
 executables are really built from the git source. It also makes sure that
 the same, tested dependencies are used and statically built into the executable.
 
@@ -22,8 +22,7 @@ Table of Contents
 
 Please note that these instructions have been forked from bitcoin's gitian build
 instructions. Please also consult their documentation, when running into problems.
-The signing is left as inherited from bitcoin at the moment, since building currently
-still fails with libiconv.
+The signing is left as inherited from bitcoin at the moment.
 
 - [Preparing the Gitian builder host](#preparing-the-gitian-builder-host)
 - [Getting and building the inputs](#getting-and-building-the-inputs)
@@ -37,9 +36,10 @@ Preparing the Gitian builder host
 The first step is to prepare the host environment that will be used to perform the Gitian builds.
 This guide explains how to set up the environment, and how to start the builds.
 
-Gitian builds are for now executed on Ubuntu 18.04 "Bionic Beaver". Please run Ubuntu in either a VM, or on your physical machine.
+Gitian builds are for now executed on Ubuntu 18.04 "Bionic Beaver". A solution is being worked on to run 
+it in docker in the future. Please run Ubuntu in either a VM, or on your physical machine.
 You need to be logged in as the `gitianuser` in order to build gitian builds. If this user does not exist yet on your system, 
-create him. 
+create it. 
 
 Note that a version of `lxc-execute` higher or equal to 2.1.1 is required.
 You can check the version with `lxc-execute --version`.
@@ -104,8 +104,8 @@ Where `fluffypony` is your Github name and `0.0.20` is the most recent tag (with
 In order to sign gitian builds on your host machine, which has your PGP key, fork the gitian.sigs repository and clone it on your host machine:
 
 ```
-git clone git@github.com:bitcoin-core/gitian.sigs.git
-git remote add satoshi git@github.com:satoshi/gitian.sigs.git
+git clone git@github.com:monero-project/gitian.sigs.git
+git remote add fluffypony git@github.com:fluffypony/gitian.sigs.git
 ```
 
 Build Binaries
@@ -120,17 +120,17 @@ To speed up the build, use `-j 5 -m 5000` as the first arguments, where `5` is t
 
 If all went well, this produces a number of (uncommited) `.assert` files in the gitian.sigs repository.
 
-You need to copy these uncommited changes to your host machine, where you can sign them:
+You need to copy these uncommited changes to your host machine, where you can sign them. For example:
 
 ```
-export NAME=satoshi
-gpg --output $VERSION-linux/$NAME/bitcoin-linux-0.16-build.assert.sig --detach-sign 0.16.0rc1-linux/$NAME/bitcoin-linux-0.16-build.assert 
-gpg --output $VERSION-osx-unsigned/$NAME/bitcoin-osx-0.16-build.assert.sig --detach-sign 0.16.0rc1-osx-unsigned/$NAME/bitcoin-osx-0.16-build.assert 
-gpg --output $VERSION-win-unsigned/$NAME/bitcoin-win-0.16-build.assert.sig --detach-sign 0.16.0rc1-win-unsigned/$NAME/bitcoin-win-0.16-build.assert 
+export NAME=fluffypony
+gpg --output $VERSION-linux/$NAME/monero-linux-0.13-build.assert.sig --detach-sign 0.16.0rc1-linux/$NAME/monero-linux-0.13-build.assert 
+gpg --output $VERSION-osx-unsigned/$NAME/monero-osx-0.13-build.assert.sig --detach-sign 0.16.0rc1-osx-unsigned/$NAME/monero-osx-0.13-build.assert 
+gpg --output $VERSION-win-unsigned/$NAME/monero-win-0.13-build.assert.sig --detach-sign 0.16.0rc1-win-unsigned/$NAME/monero-win-0.13-build.assert 
 ```
 
-Make a PR (both the `.assert` and `.assert.sig` files) to the
-[bitcoin-core/gitian.sigs](https://github.com/bitcoin-core/gitian.sigs/) repository:
+Make a pull request (both the `.assert` and `.assert.sig` files) to the
+[monero-project/gitian.sigs](https://github.com/monero-project/gitian.sigs/) repository:
 
 ```
 git checkout -b 0.0.20-not-codesigned
@@ -138,12 +138,10 @@ git commit -S -a -m "Add $NAME 0.0.20 non-code signed signatures"
 git push --set-upstream $NAME 0.0.20
 ```
 
-You can also mail the files to Wladimir (laanwj@gmail.com) and he will commit them.
-
 ```bash
-    gpg --detach-sign ${VERSION}-linux/${SIGNER}/bitcoin-linux-*-build.assert
-    gpg --detach-sign ${VERSION}-win-unsigned/${SIGNER}/bitcoin-win-*-build.assert
-    gpg --detach-sign ${VERSION}-osx-unsigned/${SIGNER}/bitcoin-osx-*-build.assert
+    gpg --detach-sign ${VERSION}-linux/${SIGNER}/monero-linux-*-build.assert
+    gpg --detach-sign ${VERSION}-win-unsigned/${SIGNER}/monero-win-*-build.assert
+    gpg --detach-sign ${VERSION}-osx-unsigned/${SIGNER}/monero-osx-*-build.assert
 ```
 
 You may have other .assert files as well (e.g. `signed` ones), in which case you should sign them too. You can see all of them by doing `ls ${VERSION}-*/${SIGNER}`.
@@ -152,7 +150,7 @@ This will create the `.sig` files that can be committed together with the `.asse
 Gitian build.
 
 
- `./gitian-build.py --detach-sign -s satoshi 0.16.0rc1 --nocommit`
+ `./gitian-build.py --detach-sign -s fluffypony 0.13.0 --nocommit`
 
 Make another pull request for these.
 
