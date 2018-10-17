@@ -79,11 +79,8 @@ This setup is required to enable networking in the container.
 
 Manual and Building
 -------------------
-The instructions below use the automated script [gitian-build.py](https://github.com/betcoin/bitcoin/blob/master/contrib/gitian-build.py) which only works in Ubuntu. For manual steps and instructions for fully offline signing, see [this guide](./gitian-building/gitian-building-manual.md).
-
-MacOS code signing
-------------------
-In order to sign builds for MacOS, you need to download the free SDK and extract a file. The steps are described [here](./gitian-building/gitian-building-mac-os-sdk.md). Alternatively, you can skip the OSX build by adding `--os=lw` below.
+The instructions below use the automated script [gitian-build.py](https://github.com/betcoin/bitcoin/blob/master/contrib/gitian-build.py) which only works in Ubuntu. 
+It calls all available descriptors. Help for the build steps taken can be accessed with `./gitian-build.py --help`.
 
 Initial Gitian Setup
 --------------------
@@ -93,15 +90,19 @@ The `gitian-build.py` script will checkout different release tags, so it's best 
 cp monero/contrib/gitian/gitian-build.py .
 ```
 
-You only need to do this once:
+Setup the required environment, you only need to do this once:
 
 ```
 ./gitian-build.py --setup fluffypony 0.0.20
 ```
 
-Where `fluffypony` is your Github name and `0.0.20` is the most recent tag (without `v`). 
+Where `fluffypony` is your Github name and `0.0.20` is the version tag you want to build (without `v`). 
 
-In order to sign gitian builds on your host machine, which has your PGP key, fork the gitian.sigs repository and clone it on your host machine:
+While gitian and this build script does provide a way for you to sign the build directly, it is recommended to sign in a seperate step. 
+This script is only there for convenience. Seperate steps for building can still be taken.
+In order to sign gitian builds on your host machine, which has your PGP key, 
+fork the gitian.sigs repository and clone it on your host machine, 
+or pass the signed assert file back to your build machine.
 
 ```
 git clone git@github.com:monero-project/gitian.sigs.git
@@ -110,8 +111,6 @@ git remote add fluffypony git@github.com:fluffypony/gitian.sigs.git
 
 Build Binaries
 -----------------------------
-Windows and OSX have code signed binaries, but those won't be available until a few developers have gitian signed the non-codesigned binaries.
-
 To build the most recent tag:
 
  `./gitian-build.py --detach-sign --no-commit -b fluffypony 0.0.20`
@@ -120,7 +119,7 @@ To speed up the build, use `-j 5 -m 5000` as the first arguments, where `5` is t
 
 If all went well, this produces a number of (uncommited) `.assert` files in the gitian.sigs repository.
 
-You need to copy these uncommited changes to your host machine, where you can sign them. For example:
+If you do detached, offline signing, you need to copy these uncommited changes to your host machine, where you can sign them. For example:
 
 ```
 export NAME=fluffypony
@@ -133,8 +132,8 @@ Make a pull request (both the `.assert` and `.assert.sig` files) to the
 [monero-project/gitian.sigs](https://github.com/monero-project/gitian.sigs/) repository:
 
 ```
-git checkout -b 0.0.20-not-codesigned
-git commit -S -a -m "Add $NAME 0.0.20 non-code signed signatures"
+git checkout -b 0.0.20
+git commit -S -a -m "Add $NAME 0.0.20"
 git push --set-upstream $NAME 0.0.20
 ```
 
@@ -143,14 +142,4 @@ git push --set-upstream $NAME 0.0.20
     gpg --detach-sign ${VERSION}-win-unsigned/${SIGNER}/monero-win-*-build.assert
     gpg --detach-sign ${VERSION}-osx-unsigned/${SIGNER}/monero-osx-*-build.assert
 ```
-
-You may have other .assert files as well (e.g. `signed` ones), in which case you should sign them too. You can see all of them by doing `ls ${VERSION}-*/${SIGNER}`.
-
-This will create the `.sig` files that can be committed together with the `.assert` files to assert your
-Gitian build.
-
-
- `./gitian-build.py --detach-sign -s fluffypony 0.13.0 --nocommit`
-
-Make another pull request for these.
 
