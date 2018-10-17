@@ -43,7 +43,7 @@ packages:
 - "libprotobuf-dev"
 - "python3-zmq"
 remotes:
-- "url": "https://github.com/monero-project/monero.git"
+- "url": "https://github.com/TheCharlatan/monero.git"
   "dir": "monero"
 files: []
 script: |
