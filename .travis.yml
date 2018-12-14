@@ -13,18 +13,16 @@ env:
     - MAKEJOBS=-j3
     - DOCKER_NAME_TAG=ubuntu:18.04
     - LC_ALL=C.UTF-8
-    - BOOST_TEST_RANDOM=1$TRAVIS_BUILD_ID
     - BASE_OUTDIR=$TRAVIS_BUILD_DIR/out
     - SDK_URL=https://bitcoincore.org/depends-sources/sdks
-    - WINEDEBUG=fixme-all
-    - DOCKER_PACKAGES="cmake build-essential libtool autotools-dev automake pkg-config bsdmainutils curl git ca-certificates python3"
+    - DOCKER_PACKAGES="cmake build-essential libtool autotools-dev automake pkg-config bsdmainutils curl git ca-certificates python python3 gperf"
 before_install:
     - export PATH=$(echo $PATH | tr ':' "\n" | sed '/\/opt\/python/d' | tr "\n" ":" | sed "s|::|:|g")
     - BEGIN_FOLD () { echo ""; CURRENT_FOLD_NAME=$1; echo "travis_fold:start:${CURRENT_FOLD_NAME}"; }
     - END_FOLD () { RET=$?; echo "travis_fold:end:${CURRENT_FOLD_NAME}"; return $RET; }
 install:
     - travis_retry docker pull $DOCKER_NAME_TAG
-    - env | grep -E '^(WINEDEBUG|LC_ALL|BOOST_TEST_RANDOM|CONFIG_SHELL)' | tee /tmp/env
+    - env | grep -E '^(LC_ALL)' | tee /tmp/env
     - if [[ $HOST = *-mingw32 ]]; then DOCKER_ADMIN="--cap-add SYS_ADMIN"; fi
     - DOCKER_ID=$(docker run $DOCKER_ADMIN -idt --mount type=bind,src=$TRAVIS_BUILD_DIR,dst=$TRAVIS_BUILD_DIR -w $TRAVIS_BUILD_DIR --env-file /tmp/env $DOCKER_NAME_TAG)
     - DOCKER_EXEC () { docker exec $DOCKER_ID bash -c "cd $PWD && $*"; }
@@ -36,9 +34,9 @@ before_script:
     - mkdir -p contrib/depends/SDKs contrib/depends/sdk-sources
     - if [ -n "$OSX_SDK" -a ! -f contrib/depends/sdk-sources/MacOSX${OSX_SDK}.sdk.tar.gz ]; then curl --location --fail $SDK_URL/MacOSX${OSX_SDK}.sdk.tar.gz -o contrib/depends/sdk-sources/MacOSX${OSX_SDK}.sdk.tar.gz; fi
     - if [ -n "$OSX_SDK" -a -f depends/sdk-sources/MacOSX${OSX_SDK}.sdk.tar.gz ]; then tar -C contrib/depends/SDKs -xf contrib/depends/sdk-sources/MacOSX${OSX_SDK}.sdk.tar.gz; fi
-    - if [[ $HOST = *-mingw32 ]]; then $DOCKER_EXEC bash -c "update-alternatives --set $HOST-gcc \$(which $HOST-gcc-posix)"; fi
+    - if [[ $HOST = *-mingw32 ]]; then DOCKER_EXEC update-alternatives --set $HOST-gcc \$\(which $HOST-gcc-posix\); fi
     - if [[ $HOST = *-mingw32 ]]; then DOCKER_EXEC update-alternatives --set $HOST-g++ \$\(which $HOST-g++-posix\); fi
-    - if [ -z "$NO_DEPENDS" ]; then DOCKER_EXEC CONFIG_SHELL= make $MAKEJOBS -C depends target=$HOST $DEP_OPTS; fi
+    - if [ -z "$NO_DEPENDS" ]; then DOCKER_EXEC make $MAKEJOBS depends target=$HOST $DEP_OPTS; fi
 script:
     - export TRAVIS_COMMIT_LOG=`git log --format=fuller -1`
     - OUTDIR=$BASE_OUTDIR/$TRAVIS_PULL_REQUEST/$TRAVIS_JOB_NUMBER-$HOST
@@ -51,25 +49,25 @@ jobs:
     - stage: build
       env: >-
         HOST=arm-linux-gnueabihf
-        PACKAGES="gperf g++-arm-linux-gnueabihf"
+        PACKAGES="g++-arm-linux-gnueabihf"
         GOAL="install"
 # ARMv7
     - stage: build
       env: >-
         HOST=aarch64-linux-gnu
-        PACKAGES="gperf g++-aarch64-linux-gnu"
+        PACKAGES="g++-aarch64-linux-gnu"
         GOAL="install"
 # Win32
     - stage: build
       env: >-
         HOST=i686-w64-mingw32
         DPKG_ADD_ARCH="i386"
-        PACKAGES="gperf g++-mingw-w64-i686"
+        PACKAGES="g++-mingw-w64-i686"
 # Win64
     - stage: build
       env: >-
         HOST=x86_64-w64-mingw32
-        PACKAGES="gperf g++-mingw-w64-x86-64"
+        PACKAGES="g++-mingw-w64-x86-64"
 # 32-bit
     - stage: build
       env: >-
@@ -79,10 +77,8 @@ jobs:
     - stage: build
       env: >-
         HOST=x86_64-unknown-linux-gnu
-        PACKAGES="gperf"
 # Cross-Mac
     - stage: build
       env: >-
         HOST=x86_64-apple-darwin11
-        PACKAGES="gperf"
         OSX_SDK=10.11
