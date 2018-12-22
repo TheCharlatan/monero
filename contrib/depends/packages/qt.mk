@@ -4,7 +4,7 @@ $(package)_download_path=https://download.qt.io/archive/qt/5.7/5.7.1/submodules
 $(package)_suffix=opensource-src-$($(package)_version).tar.gz
 $(package)_file_name=qtbase-$($(package)_suffix)
 $(package)_sha256_hash=95f83e532d23b3ddbde7973f380ecae1bac13230340557276f75f2e37984e410
-$(package)_dependencies=openssl zlib
+$(package)_dependencies=openssl
 $(package)_build_subdir=qtbase
 $(package)_qt_libs=corelib
 $(package)_patches=pidlist_absolute.patch fix_qt_pkgconfig.patch qfixed-coretext.patch
@@ -69,7 +69,7 @@ $(package)_config_opts += -pkg-config
 $(package)_config_opts += -qt-libpng
 $(package)_config_opts += -qt-libjpeg
 $(package)_config_opts += -qt-pcre
-$(package)_config_opts += -system-zlib
+$(package)_config_opts += -no-zlib
 $(package)_config_opts += -reduce-exports
 $(package)_config_opts += -static
 $(package)_config_opts += -silent
@@ -124,7 +124,6 @@ define $(package)_config_cmds
   export PKG_CONFIG_LIBDIR=$(host_prefix)/lib/pkgconfig && \
   export PKG_CONFIG_PATH=$(host_prefix)/share/pkgconfig  && \
   ./configure $($(package)_config_opts) && \
-  echo "host_build: QT_CONFIG ~= s/system-zlib/zlib" >> mkspecs/qconfig.pri && \
   echo "CONFIG += force_bootstrap" >> mkspecs/qconfig.pri && \
   $(MAKE) sub-src-clean && \
   cd ../qttranslations && ../qtbase/bin/qmake qttranslations.pro -o Makefile && \

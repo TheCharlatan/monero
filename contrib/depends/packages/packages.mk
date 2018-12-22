@@ -1,4 +1,4 @@
-packages:=boost openssl libevent zeromq cppzmq zlib expat ldns cppzmq readline libiconv qt hidapi
+packages:=boost openssl zeromq cppzmq expat ldns cppzmq readline libiconv qt hidapi
 native_packages := native_ccache
 
 darwin_native_packages = native_biplist native_ds_store native_mac_alias
@@ -17,6 +17,5 @@ endif
 
 ifneq ($(build_os),darwin)
 darwin_native_packages += native_cctools native_cdrkit native_libdmg-hfsplus
-packages += readline
 endif
 

@@ -81,4 +81,5 @@ jobs:
     - stage: build
       env: >-
         HOST=x86_64-apple-darwin11
+        PACKAGES="cmake imagemagick libcap-dev librsvg2-bin libz-dev libbz2-dev libtiff-tools python-dev python3-setuptools-git"
         OSX_SDK=10.11
