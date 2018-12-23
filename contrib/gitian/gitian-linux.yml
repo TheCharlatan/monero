@@ -7,7 +7,6 @@ architectures:
 - "amd64"
 packages:
 - "curl"
-- "gperf"
 - "gcc-7"
 - "g++-7"
 - "gcc"
