@@ -58,6 +58,8 @@ mark_as_advanced(
     Readline_LIBRARY
 )
 
+message(STATUS "${readline_INCLUDE_DIR} ${Readline_LIBRARY} ${Termcap_LIBRARY}")
+
 set(CMAKE_REQUIRED_INCLUDES ${Readline_INCLUDE_DIR})
 set(CMAKE_REQUIRED_LIBRARIES ${Readline_LIBRARY})
 
