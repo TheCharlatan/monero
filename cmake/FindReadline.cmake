@@ -58,7 +58,7 @@ mark_as_advanced(
     Readline_LIBRARY
 )
 
-message(STATUS "Include Dir: ${readline_INCLUDE_DIR} , Library: ${Readline_LIBRARY} , Termcap: ${Termcap_LIBRARY}")
+message(STATUS "Include Dir: ${Readline_INCLUDE_DIR} , Library: ${Readline_LIBRARY} , Termcap: ${Termcap_LIBRARY}")
 
 set(CMAKE_REQUIRED_INCLUDES ${Readline_INCLUDE_DIR})
 set(CMAKE_REQUIRED_LIBRARIES ${Readline_LIBRARY})
