@@ -1,4 +1,4 @@
-package=readline
+package=ncurses
 $(package)_version=6.1
 $(package)_download_path=https://ftp.gnu.org/gnu/ncurses
 $(package)_file_name=$(package)-$($(package)_version).tar.gz
