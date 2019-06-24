@@ -5,7 +5,6 @@ $(package)_file_name=$(package)-$($(package)_version).tar.gz
 $(package)_sha256_hash=aa057eeeb4a14d470101eff4597d5833dcef5965331be3528c08d99cebaa0d17
 
 define $(package)_set_vars
-  $(package)_build_opts=CC="$($(package)_cc)"
   $(package)_config_env=AR="$($(package)_ar)" RANLIB="$($(package)_ranlib)" CC="$($(package)_cc)"
   $(package)_config_env_darwin=RANLIB="$(host_prefix)/native/bin/x86_64-apple-darwin11-ranlib" AR="$(host_prefix)/native/bin/x86_64-apple-darwin11-ar" CC="$(host_prefix)/native/bin/$($(package)_cc)"
   $(package)_config_opts=--prefix=$(host_prefix)
@@ -23,14 +22,13 @@ define $(package)_set_vars
   $(package)_config_opts+=--without-manpages
   $(package)_config_opts+=--disable-tic-depends
   $(package)_config_opts+=--disable-big-strings
-  $(package)_config_opts+=--enable-ext-colors
+  $(package)_config_opts_windows+=--disable-ext-colors
   $(package)_config_opts+=--enable-pc-files
   $(package)_config_opts+=--host=$(HOST)
   $(pacakge)_config_opts+=--without-shared
   $(pacakge)_config_opts+=--without-pthread
   $(pacakge)_config_opts+=--disable-rpath
-  $(pacakge)_config_opts+=--enable-colorfgbg
-  $(pacakge)_config_opts+=--enable-ext-colors
+  $(pacakge)_config_opts_windows+=--disable-colorfgbg
   $(pacakge)_config_opts+=--enable-ext-mouse
   $(pacakge)_config_opts+=--disable-symlinks
   $(pacakge)_config_opts+=--enable-warnings
@@ -41,7 +39,8 @@ define $(package)_set_vars
   $(pacakge)_config_opts+=--enable-term-driver
   $(pacakge)_config_opts+=--enable-interop
   $(pacakge)_config_opts+=--enable-widec
-  $(package)_build_opts=CFLAGS="$($(package)_cflags) $($(package)_cppflags) -fPIC"
+  $(package)_build_opts=CC="$($(package)_cc)"
+  $(package)_build_opts+=CFLAGS="$($(package)_cflags) $($(package)_cppflags) -fPIC"
 endef
 
 define $(package)_config_cmds
