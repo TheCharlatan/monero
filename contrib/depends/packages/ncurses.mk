@@ -36,9 +36,7 @@ define $(package)_set_vars
   $(pacakge)_config_opts+=--enable-warnings
   $(pacakge)_config_opts+=--enable-assertions
   $(pacakge)_config_opts+=--disable-home-terminfo
-  $(pacakge)_config_opts+=--enable-database
   $(pacakge)_config_opts+=--enable-sp-funcs
-  $(pacakge)_config_opts+=--enable-term-driver
   $(pacakge)_config_opts+=--enable-interop
   $(pacakge)_config_opts+=--enable-widec
   $(package)_build_opts=CFLAGS="$($(package)_cflags) $($(package)_cppflags) -fPIC"
