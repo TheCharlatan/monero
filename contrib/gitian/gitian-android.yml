@@ -109,20 +109,18 @@ script: |
   # Build dependencies for each host
   export TAR_OPTIONS=--mtime=2000-01-01T12:00:00
   for i in $HOSTS; do
-    make ${MAKEOPTS} -C ${BASEPREFIX} HOST="${i}"
+    make ${MAKEOPTS} -C ${BASEPREFIX} HOST="${i}" ARFLAGS=crD AR_FLAGS=crD
   done
 
   # Faketime for binaries
   export PATH=${PATH_orig}
   create_global_faketime_wrappers "${REFERENCE_DATETIME}"
   create_per-host_faketime_wrappers "${REFERENCE_DATETIME}"
-  export PATH=${WRAP_DIR}:${PATH}
 
-  ORIGPATH="$PATH"
   # Build in a new dir for each host
   export TAR_OPTIONS=--mtime=${REFERENCE_DATE}T${REFERENCE_TIME}
   for i in ${HOSTS}; do
-    export PATH=${BASEPREFIX}/${i}/native/bin:${ORIGPATH}
+    export PATH=${WRAP_DIR}:${BASEPREFIX}/${i}/native/bin:${PATH_orig}
     mkdir build && cd build
     cmake .. -DCMAKE_TOOLCHAIN_FILE=${BASEPREFIX}/${i}/share/toolchain.cmake -DCMAKE_BUILD_TYPE=Release
     make ${MAKEOPTS}

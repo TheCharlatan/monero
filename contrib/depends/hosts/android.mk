@@ -6,6 +6,7 @@ endif
 
 android_CC=$(host_toolchain)clang
 android_CXX=$(host_toolchain)clang++
+androud_RANLIB=ranlib -D
 
 android_CFLAGS=-pipe
 android_CXXFLAGS=$(android_CFLAGS)
