@@ -3,6 +3,7 @@
 #include <strings.h>
 #include <string.h>
 #include <glob.h>
+#include <math.h>
 #include <unistd.h>
 #include <fnmatch.h>
 
@@ -78,6 +79,25 @@ __explicit_bzero_chk (void *dst, size_t len, size_t dstlen)
    __explicit_bzero_chk is implemented as an IFUNC because some
    targets do not support hidden references to IFUNC symbols.  */
 #define strong_alias (__explicit_bzero_chk, __explicit_bzero_chk_internal)
+
+
+// lets just try this to override signgam
+//#undef __signgam
+//extern "C" int signgam_old;
+//#define weak_alias (__signgam, signgam_old);
+//
+//extern "C" int signgam;
+//
+//extern "C" int signgam;
+//__asm__(".symver signgam,signgam@GLIBC_2.2.5");
+__asm__(".symver __signgam,__signgam@GLIBC_2.2.5");
+//#define weak_alias (signgam_old, __signgam);
+//
+//extern "C" int __wrap___signgam = signgam;
+
+//extern "C" int __signgam;
+//__atribute__ ((alias("__signgam")));
+
 
 #undef glob
 extern "C" int glob_old(const char * pattern, int flags, int (*errfunc) (const char *epath, int eerrno), glob_t *pglob);

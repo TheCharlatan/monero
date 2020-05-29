@@ -664,6 +664,7 @@ else()
   if(BACKCOMPAT)
       add_linker_flag_if_supported(-Wl,--wrap=__divmoddi4 LD_BACKCOMPAT_FLAGS)
       add_linker_flag_if_supported(-Wl,--wrap=glob LD_BACKCOMPAT_FLAGS)
+      add_linker_flag_if_supported(-Wl,--wrap=__signgam LD_BACKCOMPAT_FLAGS)
       message(STATUS "Using Lib C back compat flags: ${LD_BACKCOMPAT_FLAGS}")
   endif()
 
